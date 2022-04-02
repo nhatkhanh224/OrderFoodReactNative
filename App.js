@@ -5,10 +5,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 import Home from "./screens/Home";
 import CategoryDetail from "./screens/CategoryDetail";
+import Store from "./screens/Store";
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Store">
         <Stack.Screen
           name="Home"
           component={Home}
@@ -16,6 +17,10 @@ export default function App() {
         <Stack.Screen
           name="CategoryDetail"
           component={CategoryDetail}
+        />
+        <Stack.Screen
+          name="Store"
+          component={Store}
         />
       </Stack.Navigator>
     </NavigationContainer>
