@@ -6,10 +6,11 @@ const Stack = createNativeStackNavigator();
 import Home from "./screens/Home";
 import CategoryDetail from "./screens/CategoryDetail";
 import Store from "./screens/Store";
+import Food from "./screens/Food";
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Store">
+      <Stack.Navigator initialRouteName="Food">
         <Stack.Screen
           name="Home"
           component={Home}
@@ -21,6 +22,10 @@ export default function App() {
         <Stack.Screen
           name="Store"
           component={Store}
+        />
+        <Stack.Screen
+          name="Food"
+          component={Food}
         />
       </Stack.Navigator>
     </NavigationContainer>
