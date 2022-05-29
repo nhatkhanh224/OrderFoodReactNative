@@ -11,7 +11,7 @@ import Cart from "./screens/Cart";
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Cart">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={Home}

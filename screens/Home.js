@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,11 +9,41 @@ import {
   Dimensions,
   SafeAreaView,
   ScrollView,
+  FlatList,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { TabView, SceneMap } from "react-native-tab-view";
 const { width } = Dimensions.get("window");
-const Home = () => {
+import { ADDRESS } from "../constants/API";
+const Home = ({ navigation }) => {
+  const [isLoading, setLoading] = useState(true);
+  const [category, setCategory] = useState([]);
+  const [restaurant, setRestaurant] = useState([]);
+  const getCategories = async () => {
+    try {
+      const response = await fetch(ADDRESS + "show-category");
+      const json = await response.json();
+      setCategory(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getRestaurant = async () => {
+    try {
+      const response = await fetch(ADDRESS + "show-restaurant");
+      const json = await response.json();
+      setRestaurant(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getCategories();
+    getRestaurant();
+  }, []);
   return (
     <ScrollView>
       <View style={{ flex: 1, padding: 0 }}>
@@ -61,42 +91,33 @@ const Home = () => {
             style={styles.sectionImage}
           />
         </View>
+        {/* Show Category */}
         <View style={styles.typeProductContainer}>
-          <ScrollView horizontal={true}>
-            <View style={styles.listItem}>
-              <Image
-                source={{
-                  uri: "https://i.pinimg.com/736x/ad/8c/7e/ad8c7e037ef516cce5f17fef4f205543.jpg",
+          <FlatList
+            horizontal={true}
+            data={category}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+              <TouchableHighlight
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  navigation.navigate("CategoryDetail",item);
                 }}
-                style={styles.itemImageCategory}
-              />
-            </View>
-            <View style={styles.listItem}>
-              <Image
-                source={{
-                  uri: "https://i.pinimg.com/736x/ad/8c/7e/ad8c7e037ef516cce5f17fef4f205543.jpg",
-                }}
-                style={styles.itemImageCategory}
-              />
-            </View>
-            <View style={styles.listItem}>
-              <Image
-                source={{
-                  uri: "https://i.pinimg.com/736x/ad/8c/7e/ad8c7e037ef516cce5f17fef4f205543.jpg",
-                }}
-                style={styles.itemImageCategory}
-              />
-            </View>
-            <View style={styles.listItem}>
-              <Image
-                source={{
-                  uri: "https://i.pinimg.com/736x/ad/8c/7e/ad8c7e037ef516cce5f17fef4f205543.jpg",
-                }}
-                style={styles.itemImageCategory}
-              />
-            </View>
-          </ScrollView>
+                underlayColor="white"
+              >
+                <View style={styles.listItem}>
+                  <Image
+                    source={{
+                      uri: item.thumbnail,
+                    }}
+                    style={styles.itemImageCategory}
+                  />
+                </View>
+              </TouchableHighlight>
+            )}
+          />
         </View>
+        {/* End Show Category */}
         <View style={styles.collectionContainer}>
           <Text style={styles.collectionText}>Collection</Text>
           <ScrollView horizontal={true}>
@@ -137,6 +158,33 @@ const Home = () => {
         <View style={styles.nearYouContainer}>
           <Text style={styles.nearYouText}>Near you</Text>
           <ScrollView horizontal={true}>
+            <TouchableHighlight
+              onPress={() => {
+                /* 1. Navigate to the Details route with params */
+                navigation.navigate("Food");
+              }}
+              underlayColor="white"
+            >
+              <View style={styles.listNearYouItem}>
+                <Image
+                  source={{
+                    uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
+                  }}
+                  style={styles.itemImageNearYou}
+                />
+                <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
+                <View style={styles.listNearYouItemContainer}>
+                  <View style={styles.listNearYouItemInformation}>
+                    <FontAwesome name="map-marker" size={12} color="#FB5531" />
+                    <Text>1km</Text>
+                  </View>
+                  <View style={styles.listNearYouItemInformation}>
+                    <FontAwesome name="clock-o" size={12} color="#FB5531" />
+                    <Text>15phút</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableHighlight>
             <View style={styles.listNearYouItem}>
               <Image
                 source={{
@@ -216,97 +264,57 @@ const Home = () => {
           </ScrollView>
         </View>
         <View style={styles.productsContainer}>
-          <Text style={styles.productText}>Món ăn</Text>
-          <View style={styles.productsItem}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <View style={{ marginRight: 20 }}>
-                <Image
-                  source={{
-                    uri: "https://images.foody.vn/res/g66/658642/prof/s576x330/foody-mobile-2-jpg-648-636301826042522442.jpg",
-                  }}
-                  style={styles.itemImageProduct}
-                />
-              </View>
-              <View>
-                <Text style={{ fontWeight: "bold" }}>Highlands Coffee</Text>
-                <View style={styles.productInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút&nbsp;</Text>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km&nbsp;</Text>
-                  <FontAwesome name="star" size={12} color="#FB5531" />
-                  <Text>4.7</Text>
+          <Text style={styles.productText}>Dành cho bạn</Text>
+          <FlatList
+            horizontal={false}
+            data={restaurant}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+              <TouchableHighlight
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  navigation.navigate("Store", item);
+                }}
+                underlayColor="white"
+              >
+                <View style={styles.productsItem}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 20,
+                    }}
+                  >
+                    <View style={{ marginRight: 20 }}>
+                      <Image
+                        source={{
+                          uri: item.thumbnail,
+                        }}
+                        style={styles.itemImageProduct}
+                      />
+                    </View>
+                    <View>
+                      <Text style={{ fontWeight: "bold" ,width:200 }}>
+                        {item.name}
+                      </Text>
+                      <View style={styles.productInformation}>
+                        <FontAwesome name="clock-o" size={12} color="#FB5531" />
+                        <Text>15phút&nbsp;</Text>
+                        <FontAwesome
+                          name="map-marker"
+                          size={12}
+                          color="#FB5531"
+                        />
+                        <Text>1km&nbsp;</Text>
+                        <FontAwesome name="star" size={12} color="#FB5531" />
+                        <Text>4.7</Text>
+                      </View>
+                    </View>
+                  </View>
                 </View>
-                <Text style={{ marginLeft: 8, color: "gray" }}>Coffee</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.productsItem}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <View style={{ marginRight: 20 }}>
-                <Image
-                  source={{
-                    uri: "https://images.foody.vn/res/g66/658642/prof/s576x330/foody-mobile-2-jpg-648-636301826042522442.jpg",
-                  }}
-                  style={styles.itemImageProduct}
-                />
-              </View>
-              <View>
-                <Text style={{ fontWeight: "bold" }}>Highlands Coffee</Text>
-                <View style={styles.productInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút&nbsp;</Text>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km&nbsp;</Text>
-                  <FontAwesome name="star" size={12} color="#FB5531" />
-                  <Text>4.7</Text>
-                </View>
-                <Text style={{ marginLeft: 8, color: "gray" }}>Coffee</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.productsItem}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <View style={{ marginRight: 20 }}>
-                <Image
-                  source={{
-                    uri: "https://images.foody.vn/res/g66/658642/prof/s576x330/foody-mobile-2-jpg-648-636301826042522442.jpg",
-                  }}
-                  style={styles.itemImageProduct}
-                />
-              </View>
-              <View>
-                <Text style={{ fontWeight: "bold" }}>Highlands Coffee</Text>
-                <View style={styles.productInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút&nbsp;</Text>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km&nbsp;</Text>
-                  <FontAwesome name="star" size={12} color="#FB5531" />
-                  <Text>4.7</Text>
-                </View>
-                <Text style={{ marginLeft: 8, color: "gray" }}>Coffee</Text>
-              </View>
-            </View>
-          </View>
+              </TouchableHighlight>
+            )}
+          />
         </View>
       </View>
     </ScrollView>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -8,12 +8,35 @@ import {
   Image,
   Pressable,
   FlatList,
+  TouchableHighlight
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-const image = {
-  uri: "https://toplist.vn/images/800px/kem-bo-co-cuc-282727.jpg",
-};
-const Store = () => {
+import { ADDRESS } from "../constants/API";
+
+const Store = ({ route, navigation }) => {
+  const image = {
+    uri: route.params.thumbnail,
+  };
+  const restaurant_id = route.params._id;
+  const [isLoading, setLoading] = useState(true);
+  const [food, setFood] = useState([]);
+  const getFood = async () => {
+    try {
+      const response = await fetch(
+        ADDRESS + "show-restaurant-detail/" + restaurant_id
+      );
+      const json = await response.json();
+      setFood(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getFood();
+  }, []);
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -22,9 +45,9 @@ const Store = () => {
         </ImageBackground>
         <View style={styles.informationStore}>
           <Text
-            style={{ textAlign: "center", fontSize: 30, fontWeight: "700" }}
+            style={{ textAlign: "center", fontSize: 20, fontWeight: "700" }}
           >
-            Chè Bơ Cô Cúc
+            {route.params.name}
           </Text>
           <View
             style={{
@@ -78,45 +101,45 @@ const Store = () => {
         </View>
         <View style={styles.menuContainer}>
           <Text style={styles.productText}>Menu</Text>
-          <View style={styles.productsItem}>
-            <View
-              style={{
-                marginTop: 20,
-              }}
-            >
-              <View style={{ marginRight: 20 }}>
-                <Image
-                  source={{
-                    uri: "https://toplist.vn/images/800px/kem-bo-co-van-282726.jpg",
+          <FlatList
+              style={{marginLeft:30}}
+              numColumns={2}
+              data={food}
+              keyExtractor={({ _id }, index) => _id}
+              renderItem={({ item,index }) => (
+                <TouchableHighlight
+                  onPress={() => {
+                    /* 1. Navigate to the Details route with params */
+                    navigation.navigate("Food", item);
                   }}
-                  style={styles.itemImageProduct}
-                />
-              </View>
-              <View>
-                <Text style={{ fontWeight: "bold" }}>Chè bơ</Text>
-                <Text>20,000</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.productsItem}>
-            <View
-              style={{
-                marginTop: 20,
-              }}
-            >
-              <View style={{ marginRight: 20 }}>
-                <Image
-                  source={{
-                    uri: "https://toplist.vn/images/800px/kem-bo-co-van-282726.jpg",
-                  }}
-                  style={styles.itemImageProduct}
-                />
-              </View>
-              <View>
-                <Text style={{ fontWeight: "bold" }}>Chè bơ</Text>
-                <Text>20,000</Text>
-              </View>
-            </View>
+                  underlayColor="white"
+                >
+                  <View style={styles.productsItem}>
+                    <View
+                      style={{
+                        marginTop: 20,
+                      }}
+                    >
+                      <View style={{ marginRight: 20 }}>
+                        <Image
+                          source={{
+                            uri: item.image,
+                          }}
+                          style={styles.itemImageProduct}
+                        />
+                      </View>
+                      <View>
+                        <Text style={{ fontWeight: "bold",width:120 }}>{item.name}</Text>
+                        <Text>{item.price} đ</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableHighlight>
+              )}
+            />
+          <View
+            style={{ flexDirection: "row", marginLeft: 30, flexWrap: "wrap" }}
+          >
           </View>
         </View>
       </View>
@@ -147,7 +170,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginTop: -30,
     borderRadius: 20,
-    height: 140,
+    height: 160,
   },
   menuContainer: {
     flex: 2,
