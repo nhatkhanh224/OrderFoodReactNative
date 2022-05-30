@@ -8,10 +8,11 @@ import CategoryDetail from "./screens/CategoryDetail";
 import Store from "./screens/Store";
 import Food from "./screens/Food";
 import Cart from "./screens/Cart";
+import Login from "./screens/Login";
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Home"
           component={Home}
@@ -31,6 +32,10 @@ export default function App() {
         <Stack.Screen
           name="Cart"
           component={Cart}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -39,7 +39,7 @@ const Categorydetail = ({ route, navigation }) => {
         <View style={styles.productsContainer}>
           <Text style={styles.productText}>{route.params.name}</Text>
           <FlatList
-            horizontal={true}
+            horizontal={false}
             data={restaurant}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
