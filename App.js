@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Button } from 'react-native';
+import { StyleSheet, Text, View,Button , TouchableHighlight } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
@@ -12,6 +12,8 @@ import Login from "./screens/Login";
 import Order from "./screens/Order";
 import Register from "./screens/Register";
 import Information from './screens/Information';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Search from './screens/Search';
 export default function App() {
   return (
     <NavigationContainer>
@@ -21,10 +23,27 @@ export default function App() {
           component={Home}
           options={({ navigation }) => ({
             headerRight: () => (
-              <Button
-                title="Cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <View style={{flexDirection:'row'}}>
+                <TouchableHighlight
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  navigation.navigate("Cart");
+                }}
+                underlayColor="none"
+              >
+                <FontAwesome name="shopping-cart" size={24} color="#FB5531" />
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{marginLeft:20}}
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  navigation.navigate("Information");
+                }}
+                underlayColor="none"
+              >
+                <FontAwesome name="user" size={24} color="#FB5531" />
+              </TouchableHighlight>
+              </View>
             ),
           })}
         />
@@ -59,6 +78,10 @@ export default function App() {
         <Stack.Screen
           name="Information"
           component={Information}
+        />
+        <Stack.Screen
+          name="Search"
+          component={Search}
         />
       </Stack.Navigator>
     </NavigationContainer>

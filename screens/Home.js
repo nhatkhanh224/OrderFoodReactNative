@@ -18,6 +18,7 @@ const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [category, setCategory] = useState([]);
   const [restaurant, setRestaurant] = useState([]);
+  const [keySearch, setKeySearch] = useState();
   const getCategories = async () => {
     try {
       const response = await fetch(ADDRESS + "show-category");
@@ -44,6 +45,7 @@ const Home = ({ navigation }) => {
     getCategories();
     getRestaurant();
   }, []);
+  
   return (
     <ScrollView>
       <View style={{ flex: 1, padding: 0 }}>
@@ -52,22 +54,21 @@ const Home = ({ navigation }) => {
             <TouchableHighlight
               onPress={() => {
                 /* 1. Navigate to the Details route with params */
-                navigation.navigate("Search", { key: key });
+                navigation.navigate("Search", { key: keySearch });
               }}
               underlayColor="none"
             >
               <FontAwesome
                 name="search"
-                size={14}
+                size={20}
                 color="#969696"
-                // onChangeText={(value) => setKey(value)}
               />
             </TouchableHighlight>
 
             <TextInput
               style={styles.inputText}
               placeholder="Bạn tìm gì hôm nay?"
-              // onChangeText={(value) => setKey(value)}
+              onChangeText={(value) => setKeySearch(value)}
             ></TextInput>
           </View>
           {/*  */}
@@ -155,114 +156,7 @@ const Home = ({ navigation }) => {
             </View>
           </ScrollView>
         </View>
-        <View style={styles.nearYouContainer}>
-          <Text style={styles.nearYouText}>Near you</Text>
-          <ScrollView horizontal={true}>
-            <TouchableHighlight
-              onPress={() => {
-                /* 1. Navigate to the Details route with params */
-                navigation.navigate("Food");
-              }}
-              underlayColor="white"
-            >
-              <View style={styles.listNearYouItem}>
-                <Image
-                  source={{
-                    uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
-                  }}
-                  style={styles.itemImageNearYou}
-                />
-                <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
-                <View style={styles.listNearYouItemContainer}>
-                  <View style={styles.listNearYouItemInformation}>
-                    <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                    <Text>1km</Text>
-                  </View>
-                  <View style={styles.listNearYouItemInformation}>
-                    <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                    <Text>15phút</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableHighlight>
-            <View style={styles.listNearYouItem}>
-              <Image
-                source={{
-                  uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
-                }}
-                style={styles.itemImageNearYou}
-              />
-              <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
-              <View style={styles.listNearYouItemContainer}>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km</Text>
-                </View>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.listNearYouItem}>
-              <Image
-                source={{
-                  uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
-                }}
-                style={styles.itemImageNearYou}
-              />
-              <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
-              <View style={styles.listNearYouItemContainer}>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km</Text>
-                </View>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.listNearYouItem}>
-              <Image
-                source={{
-                  uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
-                }}
-                style={styles.itemImageNearYou}
-              />
-              <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
-              <View style={styles.listNearYouItemContainer}>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km</Text>
-                </View>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.listNearYouItem}>
-              <Image
-                source={{
-                  uri: "https://cdn.beptruong.edu.vn/wp-content/uploads/2018/06/bun-dau-mam-tom-thap-cam.jpg",
-                }}
-                style={styles.itemImageNearYou}
-              />
-              <Text style={styles.listNearYouTextItem}>Bún đậu chị Hằng</Text>
-              <View style={styles.listNearYouItemContainer}>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="map-marker" size={12} color="#FB5531" />
-                  <Text>1km</Text>
-                </View>
-                <View style={styles.listNearYouItemInformation}>
-                  <FontAwesome name="clock-o" size={12} color="#FB5531" />
-                  <Text>15phút</Text>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
+        
         <View style={styles.productsContainer}>
           <Text style={styles.productText}>Dành cho bạn</Text>
           <FlatList
@@ -341,7 +235,7 @@ const styles = StyleSheet.create({
   inputText: {
     color: "#969696",
     fontSize: 17,
-    marginLeft: 8,
+    marginLeft: 20,
     fontWeight: "500",
   },
   cartContainer: {

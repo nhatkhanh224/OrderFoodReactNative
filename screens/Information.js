@@ -20,7 +20,6 @@ function Information({ navigation }) {
       const response = await fetch(ADDRESS + "show-user/" + userID);
       const json = await response.json();
       setUserData(json);
-      console.log(json);
     } catch (error) {
       console.error(error);
     }

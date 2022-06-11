@@ -26,10 +26,6 @@ const Cart = ({ route, navigation }) => {
   useEffect(() => {
     getCarts();
   }, []);
-  console.log(cart);
-  const test=(value)=>{
-    return 1;
-  }
   return (
     <ScrollView>
       <View style={styles.cartContainer}>

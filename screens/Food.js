@@ -12,7 +12,6 @@ import "intl/locale-data/jsonp/en";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ADDRESS } from "../constants/API";
 const Food = ({ route, navigation }) => {
-  console.log("FOOD", route.params);
   const [quantity, setQuantity] = useState(
     route.params.quantity ? route.params.quantity : 1
   );
