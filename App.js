@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Button } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
@@ -9,13 +9,24 @@ import Store from "./screens/Store";
 import Food from "./screens/Food";
 import Cart from "./screens/Cart";
 import Login from "./screens/Login";
+import Order from "./screens/Order";
+import Register from "./screens/Register";
+import Information from './screens/Information';
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
+      <Stack.Screen
           name="Home"
           component={Home}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <Button
+                title="Cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="CategoryDetail"
@@ -36,6 +47,18 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+        />
+        <Stack.Screen
+          name="Order"
+          component={Order}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+        />
+        <Stack.Screen
+          name="Information"
+          component={Information}
         />
       </Stack.Navigator>
     </NavigationContainer>
